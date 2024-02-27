@@ -1,0 +1,4 @@
+[submodule "libiio-sys/vendor/libiio"]
+	path = libiio-sys/vendor/libiio
+	url = https://github.com/analogdevicesinc/libiio.git
+	branch = libiio-v0

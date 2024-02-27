@@ -13,3 +13,6 @@ keywords = ["linux", "embedded", "analog", "iio"]
 categories = ["embedded", "hardware-support", "os", "os::unix-apis"]
 
 [dependencies]
+
+[build-dependencies]
+cc = "1.0.88"
