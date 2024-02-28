@@ -49,7 +49,6 @@ use std::{
 };
 
 use libiio_sys::{self as ffi};
-use nix::errno;
 
 pub use crate::buffer::*;
 pub use crate::channel::*;
@@ -57,6 +56,7 @@ pub use crate::context::*;
 pub use crate::device::*;
 pub use crate::errors::*;
 
+pub(crate) mod unix_error;
 mod macros;
 
 pub mod buffer;
@@ -86,7 +86,7 @@ fn cstring_opt(pstr: *const c_char) -> Option<String> {
 
 pub(crate) fn sys_result<T>(ret: i32, result: T) -> Result<T> {
     if ret < 0 {
-        Err(errno::from_i32(-ret).into())
+        Err(unix_error::Error::from_i32(-ret).into())
     }
     else {
         Ok(result)

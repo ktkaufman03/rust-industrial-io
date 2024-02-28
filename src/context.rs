@@ -10,8 +10,7 @@
 //! Industrial I/O Contexts.
 //!
 
-use crate::{cstring_opt, ffi, sys_result, Device, Error, Result, Version};
-use nix::errno::{self, Errno};
+use crate::{cstring_opt, ffi, sys_result, unix_error, Device, Error, Result, Version};
 use std::{
     ffi::{CStr, CString},
     os::raw::{c_char, c_uint},
@@ -117,7 +116,7 @@ impl InnerContext {
     /// will use the last error on failure.
     fn new(ctx: *mut ffi::iio_context) -> Result<Self> {
         if ctx.is_null() {
-            Err(Error::from(Errno::last()))
+            Err(Error::from(unix_error::last_error()))
         }
         else {
             Ok(Self { ctx })
@@ -358,7 +357,7 @@ impl Context {
             ffi::iio_context_get_attr(self.inner.ctx, idx as c_uint, &mut pname, &mut pval)
         };
         if ret < 0 {
-            return Err(errno::from_i32(ret).into());
+            return Err(unix_error::from_i32(ret).into());
         }
         let name = cstring_opt(pname);
         let val = cstring_opt(pval);

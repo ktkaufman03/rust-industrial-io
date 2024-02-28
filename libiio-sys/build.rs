@@ -22,6 +22,7 @@ fn pass_env_as_cmake_define(env_name: &'static str, config: &mut cmake::Config) 
 }
 
 fn main() {
+    println!("cargo:rerun-if-changed=build.rs");
     let libiio_path = Path::new("vendor/libiio");
     let mut config = cmake::Config::new(libiio_path);
     config.define("INSTALL_UDEV_RULE", "OFF");
@@ -53,7 +54,11 @@ fn main() {
         "cargo:rustc-link-search=native={}",
         dst.join("lib").display()
     );
-    println!("cargo:rustc-link-lib=iio");
+    println!("cargo:rustc-link-lib={}", if cfg!(windows) {
+        "libiio"
+    } else {
+        "iio"
+    });
 
     let bindings = bindgen::Builder::default()
         .header(dst.join("include/iio.h").to_string_lossy())

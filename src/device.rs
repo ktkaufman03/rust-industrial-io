@@ -12,7 +12,6 @@
 
 use super::*;
 use crate::{ffi, ATTR_BUF_SIZE};
-use nix::errno::Errno;
 use std::{
     collections::HashMap,
     ffi::CString,
@@ -281,7 +280,7 @@ impl Device {
     pub fn create_buffer(&self, sample_count: usize, cyclic: bool) -> Result<Buffer> {
         let buf = unsafe { ffi::iio_device_create_buffer(self.dev, sample_count, cyclic) };
         if buf.is_null() {
-            return Err(Errno::last().into());
+            return Err(unix_error::last_error().into());
         }
         Ok(Buffer {
             buf,

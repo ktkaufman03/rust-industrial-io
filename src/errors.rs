@@ -12,6 +12,7 @@
 
 use std::{ffi, io};
 use thiserror::Error;
+pub use crate::unix_error::Error as UnixError;
 
 //type SysError = nix::Error::Sys;
 
@@ -26,7 +27,7 @@ pub enum Error {
     NulError(#[from] ffi::NulError),
     /// A low-level Unix-style error
     #[error("{0}")]
-    Nix(#[from] nix::Error),
+    Nix(UnixError),
     /// An error converting a value to/from a string representation.
     #[error("String conversion error")]
     StringConversionError,
@@ -46,3 +47,9 @@ pub enum Error {
 
 /// The default result type for the IIO library
 pub type Result<T> = std::result::Result<T, Error>;
+
+impl From<UnixError> for Error {
+    fn from(value: UnixError) -> Self {
+        Self::Nix(value)
+    }
+}
