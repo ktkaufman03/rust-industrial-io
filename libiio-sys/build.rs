@@ -25,8 +25,28 @@ fn main() {
     let libiio_path = Path::new("vendor/libiio");
     let mut config = cmake::Config::new(libiio_path);
     config.define("INSTALL_UDEV_RULE", "OFF");
+
+    // Misc. options
+    pass_env_as_cmake_define("ENABLE_IPV6", &mut config);
+    pass_env_as_cmake_define("WITH_ZSTD", &mut config);
+    pass_env_as_cmake_define("HAVE_DNS_SD", &mut config);
+    
+    // Backend options
+    pass_env_as_cmake_define("WITH_LOCAL_BACKEND", &mut config);
+    pass_env_as_cmake_define("WITH_USB_BACKEND", &mut config);
+    pass_env_as_cmake_define("WITH_SERIAL_BACKEND", &mut config);
+    pass_env_as_cmake_define("WITH_NETWORK_BACKEND", &mut config);
+    pass_env_as_cmake_define("WITH_XML_BACKEND", &mut config);
+
+    // Library options
     pass_env_as_cmake_define("LIBUSB_INCLUDE_DIR", &mut config);
     pass_env_as_cmake_define("LIBUSB_LIBRARIES", &mut config);
+    pass_env_as_cmake_define("LIBXML2_INCLUDE_DIR", &mut config);
+    pass_env_as_cmake_define("LIBXML2_LIBRARIES", &mut config);
+    pass_env_as_cmake_define("LIBSERIALPORT_INCLUDE_DIR", &mut config);
+    pass_env_as_cmake_define("LIBSERIALPORT_LIBRARIES", &mut config);
+    pass_env_as_cmake_define("LIBZSTD_INCLUDE_DIR", &mut config);
+    pass_env_as_cmake_define("LIBZSTD_LIBRARIES", &mut config);
 
     let dst = config.build();
     println!(
