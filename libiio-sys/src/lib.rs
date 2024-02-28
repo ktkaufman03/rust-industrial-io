@@ -13,11 +13,4 @@
 // Bindgen uses u128 on some rare parameters
 #![allow(improper_ctypes)]
 
-// Bring in the bindgen bindings of "iio.h"
-#[cfg(all(unix, target_pointer_width = "64"))]
-include!(concat!(env!("CARGO_MANIFEST_DIR"), "/bindings/bindings-0.21_64.rs"));
-
-#[cfg(all(unix, target_pointer_width = "32"))]
-include!(concat!(env!("CARGO_MANIFEST_DIR"), "/bindings/bindings-0.21_32.rs"));
-
-
+include!(concat!(env!("OUT_DIR"), "/iio_bindings.rs"));
