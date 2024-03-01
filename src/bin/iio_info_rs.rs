@@ -91,11 +91,14 @@ fn main() {
                 else if let Ok(val) = chan.attr_read_int(&attr) {
                     println!("{}", val);
                 }
-                else if let Ok(val) = chan.attr_read_bool(&attr) {
+                // else if let Ok(val) = chan.attr_read_bool(&attr) {
+                //     println!("{}", val);
+                // }
+                else if let Ok(val) = chan.attr_read_str(&attr) {
                     println!("{}", val);
                 }
                 else {
-                    println!("{}", chan.find_attr(&attr).unwrap());
+                    println!("(failed to read)");
                 }
             }
         }
